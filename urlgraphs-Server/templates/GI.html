@@ -1,0 +1,107 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>urlgraphs-web</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="../static/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body
+      {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav
+      {
+        padding: 9px 0;
+      }
+    </style>
+    <link href="../static/bootstrap-responsive.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span2">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li>Profondita` raggiunta</li>
+              <li class="active">2</li>
+              <br>
+              <li class="nav-header">Impostazione Timeout</li>              
+              <li class="active">30</li>
+              <br>
+              <li class="nav-header">Numero URL non analizzati</li>
+              <li class="active">50</li>
+              <br>
+              <li class="nav-header">Tempo trascorso</li>              
+              <li class="active">1:30:22</li>
+              <br>
+              <li class="nav-header">Criteri di ricerca</li>
+              <li class="active">Modello 1</li>
+              <li class="active">Modello 2</li>
+              <li class="active">Modello 3</li>
+              <li class="active">Modello 4</li>
+              <li class="active">DiffBot</li>
+              <br>
+            </ul>
+          </div>
+        </div>
+        <div class="span7">
+          <div class="hero-unit">
+            <h1>Lista alias</h1>
+            <br>
+            <ul class="nav nav-list">
+              <li class="active">N0 : questo e' il primo link</li>
+              <li class="active">N1 : questo e' il secondo link</li>
+              <li class="active">N2 : questo e' il terzo link</li>
+              <li class="active">N3 : questo e' il quarto link</li>
+              <li class="active">N4 : questo e' il quinto link</li>
+              <li class="active">N5 : questo e' il sesto link</li>
+              <li class="active">N6 : questo e' il settimo link</li>
+            </ul>            
+          </div>
+          <div class="hero-unit">
+            <a data-toggle="modal" href="#myModal" class="btn btn-primary btn-large">Pause</a>
+            <a data-toggle="modal" href="#myModal" class="btn btn-primary btn-large">Play</a>
+            <a data-toggle="modal" href="#myModal" class="btn btn-primary btn-large">Graphshot</a>
+            <br>
+            <br>  
+            <h2>Qui ci va il grafico<h2>
+            <script src='../static/force.js' type='text/javascript'></script>
+          </div>
+        </div>
+        <div class="span3">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li>Profondita' voluta</li>
+              <li class="active">3</li>
+              <br>                          
+              <li class="nav-header">Percorso file input</li>
+              <li class="active">C:/input</li>
+              <a data-toggle="modal" href="#myModal" class="btn btn-primary btn-small">Sfoglia</a>
+              <br>
+              <br>
+              <li class="nav-header">Percorso file output</li>
+              <li class="active">C:/output</li>
+              <a data-toggle="modal" href="#myModal" class="btn btn-primary btn-small">Sfoglia</a>
+              <br>
+              <br>
+              <li class="nav-header">Percorso file link non validi</li>              
+              <li class="active">C:/fakeurls</li>
+              <a data-toggle="modal" href="#myModal" class="btn btn-primary btn-small">Sfoglia</a>
+              <br>
+              <br>
+              <li class="nav-header">Percorso slvataggio istantanee</li>              
+              <li class="active">C:/pics</li>
+              <a data-toggle="modal" href="#myModal" class="btn btn-primary btn-small">Sfoglia</a>
+              <br>
+              <br>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <hr>
+    </div>        
+  </body>
+</html>
