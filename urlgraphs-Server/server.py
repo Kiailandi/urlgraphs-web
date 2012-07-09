@@ -18,8 +18,6 @@ def index():
     url_for('static', filename='bootstrap.css')
     url_for('static', filename='bootstrap-responsive.css')
     url_for('static', filename='docs.css')
-    url_for('static', filename='submit.js')
-#   url_for('static', filename='force.js')
     return render_template('GI.html')
 
 
@@ -27,34 +25,22 @@ def index():
 def winter():
     return "Brace urself, Winter is comin"
 
-@app.route("/Pause")
-def pause():
-    return "Pause"
-
-@app.route("/Play")
-def play():
-    return "Play"
-
-@app.route("/Graphshot")
-def graphshot():
-    return "Graphshot"
-
 @app.errorhandler(404)
 def page_not_found(error):
     return "ERROR 404 PAGINA INESISTENTE", 404
-
 
 @app.route('/submit/', methods=['POST'])
 def submit():
     import json
     db = get_redis()
+    import requests
 
-    urls = ['http://www.google.com']
+#    urls = ['http://www.google.com', 'www.facebook.com']
 
-    data = dict(
-        timeout=30.,
-        urls=urls,
-    )
+#    data = dict(
+#      timeout=30.,
+#      urls=urls,
+#    )
 
     db.rpush(JOBS_KEY, json.dumps(data))
 
