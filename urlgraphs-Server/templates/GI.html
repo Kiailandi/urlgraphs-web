@@ -8,7 +8,6 @@
     <link href="../static/bootstrap.css" rel="stylesheet">
     <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
     <script src="../static/submit.js"></script>
-    <script src="../static/AtLeastOneChecked.js"></script>
     <style type="text/css">
       body
       {
@@ -42,6 +41,8 @@
               <li class="active">1:30:22</li>
               <br>
               <li class="nav-header">Criteri di ricerca</li>
+              <li><sub><i>At least one must be checked or Diffbot will be used as default one</i></sub></li>
+              <br>
               <li class="active"><input type="checkbox" class = "opt1" name="option1" value="Modello1" checked> Turisti per caso</li>
               <br>
               <li class="active"><input type="checkbox" class = "opt2" name="option2" value="Modello2" checked> Vbulletin Topic</li>
@@ -95,13 +96,13 @@
               	  <textarea name="timeout" cols="2" rows="1">30</textarea>
               	</form>	
 	      </li>                    
-              <li class="nav-header">Percorso file input</li>
+              <li class="nav-header">URl input</li>
               <li class="active">
                 <form name="UrlInput" method="" action="">
-              	  <textarea name="input" cols="20" rows="1">C:/input</textarea>
+              	  <textarea name="input" cols="20" rows="10">http://www.google.it</textarea>
               	</form>	
 	      </li>
-              <li class="nav-header">Percorso file output</li>
+             <!-- <li class="nav-header">Percorso file output</li>
               <li class="active">
                 <form name="UrlOutput" method="" action="">
               	  <textarea name="output" cols="20" rows="1">C:/output</textarea>
@@ -118,7 +119,7 @@
                 <form name="UrlShots" method="" action="">
               	  <textarea name="shots" cols="20" rows="1">C:/pics</textarea>              	  
 	      	</form>	
-	      </li>
+	      </li> !-->
 	      <li>
 	        <script src="../static/sub_confirm.js"></script>
 	        <script src="../static/input.js"></script>
