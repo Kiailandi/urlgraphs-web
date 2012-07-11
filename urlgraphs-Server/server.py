@@ -3,7 +3,6 @@ __author__ = 'tommaso'
 from flask import Flask, render_template, url_for, jsonify, request
 
 app = Flask(__name__)
-
 JOBS_KEY = 'jobs'
 
 
@@ -19,7 +18,6 @@ def index():
     url_for('static', filename='bootstrap-responsive.css')
     url_for('static', filename='docs.css')
     return render_template('GI.html')
-
 
 @app.route("/icencold")
 def winter():
@@ -81,14 +79,46 @@ def submit():
     finally:
 #       dubug
         print data['timeout']
-#   da migliorare, sintassi dispersiva e valori come stringhe e non booleani
-    if  data ['Turisti_per_caso'] == 'false' and   \
-        data ['Vbulletin_Topic'] == 'false' and    \
-        data ['Vbulletin_Section'] == 'false' and  \
-        data ['Yahoo_Answer'] == 'false' and       \
-        data ['All_Ahref'] == 'false' and          \
-        data ['DiffBot'] == 'false':
-        data ['DiffBot'] = 'true'
+
+#   Correzione tipo valori da stringhe a booleani (cercare metodo migliore)
+    if  data ['Turisti_per_caso'] == 'false':
+        data ['Turisti_per_caso'] = False
+    else:
+        data ['Turisti_per_caso'] = True
+
+    if  data ['Vbulletin_Topic'] == 'false':
+        data ['Vbulletin_Topic'] = False
+    else:
+        data ['Vbulletin_Topic'] = True
+
+    if  data ['Vbulletin_Section'] == 'false':
+        data ['Vbulletin_Section'] = False
+    else:
+        data ['Vbulletin_Section'] = True
+
+    if  data ['Yahoo_Answer'] == 'false':
+        data ['Yahoo_Answer'] = False
+    else:
+        data ['Yahoo_Answer'] = True
+
+    if  data ['All_Ahref'] == 'false':
+        data ['All_Ahref'] = False
+    else:
+        data ['All_Ahref'] = True
+
+    if  data ['DiffBot'] == 'false':
+        data ['DiffBot'] = False
+    else:
+        data ['DiffBot'] = True
+
+        #   da migliorare, sintassi dispersiva
+    if  data ['Turisti_per_caso'] == False and   \
+        data ['Vbulletin_Topic'] == False and    \
+        data ['Vbulletin_Section'] == False and  \
+        data ['Yahoo_Answer'] == False and       \
+        data ['All_Ahref'] == False and          \
+        data ['DiffBot'] == False:
+        data ['DiffBot'] = True
 #       debug
         print data ['DiffBot']
 
