@@ -1,8 +1,8 @@
 JOBS_KEY = 'jobs'
+RESULTS_KEY = "res"
 
 def get_redis():
     import redis
-
     return redis.Redis()
 
 def main():
@@ -31,12 +31,16 @@ def main():
 
         for tupla_url in process.analysis():
 #           debug [all]
+            print '\n'
             print 'Sito Iniziale'
             print tupla_url[0]
             print '\n'
             print 'Sequenza siti'
             print tupla_url[1]
             print '\n'*3
-
+            res = red.rpush(RESULTS_KEY, tupla_url)
+#       debug
+        red.rpush(RESULTS_KEY, ('status', 'end'))
+        print "TANGO DOWN BRO, ALL CLEAR GJ!!"
 if __name__ == "__main__":
      main()

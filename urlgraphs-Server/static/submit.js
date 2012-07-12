@@ -12,6 +12,6 @@ $(document).ready(function()
     							          "Yahoo_Answer"      : $('input.opt4').is(':checked'),
     							          "All_Ahref"         : $('input.opt5').is(':checked'),
     							          "DiffBot"           : $('input.opt6').is(':checked')
-     							} ) })
+     							})})
 });
                                                             

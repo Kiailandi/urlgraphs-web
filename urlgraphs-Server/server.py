@@ -1,9 +1,10 @@
 __author__ = 'tommaso'
 
-from flask import Flask, render_template, url_for, jsonify, request
+from flask import Flask, render_template, url_for, jsonify, request, Response
 
 app = Flask(__name__)
 JOBS_KEY = 'jobs'
+RESULTS_KEY = 'res'
 
 
 def get_redis():
@@ -129,8 +130,27 @@ def submit():
 #    )
 
     db.rpush(JOBS_KEY, json.dumps(data))
-
     return jsonify(success=True)
+
+@app.route('/sse/')
+def sse():
+    def generate():
+        red = get_redis()
+        while True:
+#           debug
+            print "sto per fare la blpop"
+            res = red.blpop(RESULTS_KEY,30)
+#           debug
+            print "blpop fatta"
+            # elaboro res
+#           debug
+            print repr(res)
+            yield res
+            if res[1][1] == 'end':
+                break
+#       debug
+        print 'tutto ok'
+    return Response(generate())
 
 
 if __name__ == "__main__":

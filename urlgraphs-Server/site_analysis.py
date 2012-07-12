@@ -124,19 +124,19 @@ class YahooAnswer(Parser):
         return False
 
     def found_thread_topics(self,section_topics):
-    #        found thread questions in section
+#        found thread questions in section
         h3_list = section_topics.findAll('h3')
         for h3 in h3_list:
             yield 'http://it.answers.yahoo.com/' + h3.find('a').get('href')
 
     def found_messages_topic(self,topic_messages):
-    #        found messages in the topic question
+#        found messages in the topic question
         a_list = topic_messages.findAll('a',{'rel':'nofollow'})
         for a in a_list:
             yield a.get('href')
 
     def run(self,url):
-    #        start Yahoo answer rule
+#        start Yahoo answer rule
         thread_topics, messages_topic = self.yahoo_page_parser(url)
         if thread_topics is not None:
             for a in self.found_thread_topics(thread_topics):
@@ -157,7 +157,7 @@ class TuristiPerCaso(Parser):
 
     @staticmethod
     def a_valid(a):
-    #        rules for valid a_href URL
+#        rules for valid a_href URL
         try:
             href = a['href']
         except KeyError:
@@ -183,14 +183,14 @@ class TuristiPerCaso(Parser):
         if cls and 'reply' in cls:
             return False
 
-        #        mailto
+#        mailto
         if href.startswith('mailto:'):
             return False
 
         return True
 
     def unescape_and_iter(self, text):
-    #        unescape old links
+#        unescape old links
         html = self.html_parser.unescape(text)
         soup = BeautifulSoup(html, "lxml")
         for a in soup.find_all('a'):
@@ -198,8 +198,8 @@ class TuristiPerCaso(Parser):
                 yield a['href']
 
     def found_paginator(self, text_soup):
-    #        found URL pagination
-    #        <div class="paginator" ... >
+#        found URL pagination
+#        <div class="paginator" ... >
         page_div = text_soup.find('div', {'class': 'paginator'})
         if page_div is not None:
             ol = page_div.find('ol', {'class': 'center'})
@@ -207,7 +207,7 @@ class TuristiPerCaso(Parser):
                 yield 'http://turistipercaso.it' + url_topic.get('href')
 
     def run(self, url, with_user=False):
-    #        run TuristiPerCaso rules
+#        run TuristiPerCaso rules
         logger.info('Run TuristiPerCaso rules of the site: %s', url)
         page = get(url,self.timeout)
         text_soup = BeautifulSoup(page, "lxml")
@@ -224,8 +224,8 @@ class TuristiPerCaso(Parser):
                 if self.a_valid(a):
                     yield a['href']
 
-                    #&lt;a href=&quot;http://viaggiareconibambini.blogspot.com/search/label/Alto%20Adige&quot;
-                #            encoding errors
+            #&lt;a href=&quot;http://viaggiareconibambini.blogspot.com/search/label/Alto%20Adige&quot;
+#            encoding errors
             for forum_text in f_section.find_all('div', {'class': 'forum_text'}):
                 # find escaped links in text
                 text = forum_text.text
@@ -237,7 +237,7 @@ class TuristiPerCaso(Parser):
                     text = tag.text
                     for found_url in self.unescape_and_iter(text):
                         yield found_url
-                        #            run paginator
+                    #            run paginator
 
             for a_page in self.found_paginator(text_soup):
                 yield a_page
@@ -280,9 +280,12 @@ class VBulletin_Section(Parser):
         page = get(url, self.timeout)
         section_soup = BeautifulSoup(page, "lxml")
         html = section_soup.find('html')
-        f_section = section_soup.find('div', {"id": "threadlist"}, {"class": "threadlist"})
-        if html.get('id') == 'vbulletin_html' and f_section is not None:
-            return True
+        if html is not None:
+            f_section = section_soup.find('div', {"id": "threadlist"}, {"class": "threadlist"})
+            if html.get('id') == 'vbulletin_html' and f_section is not None:
+                return True
+        else:
+            return False
 
         return False
 
@@ -355,12 +358,15 @@ rel="nofollow" href="http://www.eden-hotel.com" target="_blank">www.eden-hotel.c
         page = get(url, self.timeout)
         topic_soup = BeautifulSoup(page, "lxml")
         html = topic_soup.find('html')
-        f_topic = topic_soup.find('div', {"id": "postlist"}, {"class": "postlist restrain"})
-        #        try: # is possible html.get('id') == None
-        if html.get('id') == 'vbulletin_html' and f_topic is not None:
-            return True
+        if html is not None:
+            f_topic = topic_soup.find('div', {"id": "postlist"}, {"class": "postlist restrain"})
+            #        try: # is possible html.get('id') == None
+            if html.get('id') == 'vbulletin_html' and f_topic is not None:
+                return True
             #        except:
-        #            return False
+            #            return False
+        else:
+            return False
 
         return False
 
@@ -381,7 +387,7 @@ rel="nofollow" href="http://www.eden-hotel.com" target="_blank">www.eden-hotel.c
                     yield a.get('href')
 
     def run(self, url):
-    #        run VBulletin section rules
+#        run VBulletin section rules
         logger.info('Run VBulletin section rules of the site: %s', url)
         page = get(url, self.timeout)
         text_soup = BeautifulSoup(page, "lxml")
@@ -400,10 +406,10 @@ class GenericLink(Parser):
 
     s_token = '22df3421e2ecce206e95c4e68b44b9aa'
 
-    # ------------------------
-    # DELETE
+# ------------------------
+# DELETE
 
-    # diffbot's analysis
+# diffbot's analysis
     def match(self, url):
         return True
 
@@ -478,17 +484,17 @@ class Processor(object):
     defSite = DefSites()
     jobs = defaultdict(list)
 
-    #   Init Engine, templist and depthRoot required
+#   Init Engine, templist and depthRoot required
     def __init__(self,
-                 templist,
-                 depthRoot,
-                 __VBulletin_Section=False,
-                 __VBulletin_Topic=False,
-                 __YahooAnswer=False,
-                 __TuristiPerCaso=False,
-                 __GenericLink=False,
-                 __AlLink=False,
-                 timeout=30):
+                               templist,
+                               depthRoot,
+                               __VBulletin_Section=False,
+                               __VBulletin_Topic=False,
+                               __YahooAnswer=False,
+                               __TuristiPerCaso=False,
+                               __GenericLink=False,
+                               __AlLink=False,
+                               timeout=30):
 
         timeout = int(timeout)
         # parser define
@@ -530,8 +536,7 @@ class Processor(object):
         try:
             return self.siteslist.index(url)
         except ValueError:
-            self.siteslist.append(url)
-            return len(self.siteslist) - 1
+            return -1
 
 
     def clear_site(self, url,base=' '):
@@ -540,16 +545,16 @@ class Processor(object):
         if url is None:
             return url
 
-            #   /contact
+    #   /contact
         url = self.absolutize(url,base)
 
-        #    print
+    #    print
         if url.endswith('print'):
             url = url.replace('print', '')
         if url.endswith('print/'):
             url = url.replace('print/', '')
 
-            #   replace '' (space) with %20
+    #   replace '' (space) with %20
         s = urlparse(url.replace(' ', '%20'))
 
         logger.info('urlparse: %s', s)
@@ -567,8 +572,8 @@ class Processor(object):
         return site
 
     def absolutize(self, found_url,base_url):
-    #        absolutize url
-    #        /contatti -> htto://www.google/contatti
+#        absolutize url
+#        /contatti -> htto://www.google/contatti
         from urlparse import urljoin
         return urljoin(base_url, found_url).replace('/../', '/')
 
@@ -607,20 +612,20 @@ class Processor(object):
             logger.warning(inv + 'javascript URL: %s', url)
             return False
 
-            #   http://www.fassaforum.com/attachment.php?s=0f2a782eb8404a03f30d91df3d7f7ca5&attachmentid=702&d=1280593484
+    #   http://www.fassaforum.com/attachment.php?s=0f2a782eb8404a03f30d91df3d7f7ca5&attachmentid=702&d=1280593484
         if  url.find('showthread.php') != -1 or url.find('attachment.php') != -1:
-        #        post reply / login page
+    #        post reply / login page
             logger.warning(inv + 'post\'s reply or login page: (showthread or attachment): %s', url)
             return False
 
-            #    http://www.forumviaggiatori.com/members/norman+wells.htm
+    #    http://www.forumviaggiatori.com/members/norman+wells.htm
         if url.find('/members/') != -1:
-        #        user login page
+    #        user login page
             logger.warning(inv + 'user login page: %s', url)
             return False
 
         if url.endswith('?popup'):
-        #        popup login register
+    #        popup login register
             logger.warning(inv + 'popup login: %s', url)
             return False
 
@@ -633,7 +638,7 @@ class Processor(object):
             return False
 
         if s.hostname is None and s.path is None:
-        #        URL is blank
+    #        URL is blank
             logger.warning(inv + 'URL blank')
             return False
 
@@ -645,12 +650,12 @@ class Processor(object):
            s_path.find('fotogallery') != -1 or\
            s_query.find('idphoto') != -1 or\
            s_query.find('idfoto') != -1:
-        #        URL to image
+    #        URL to image
             logger.warning(inv + 'image URL: %s', url)
             return False
 
         if s_path.find('/forum/p/abuse/') != -1:
-        #        popup login registration
+    #        popup login registration
             logger.warning(inv + 'registration login: %s', s_path)
             return False
 
@@ -685,15 +690,15 @@ class Processor(object):
         return True
 
     def run(self, url,parser):
-    #        found links on url, with parser: XYZ
+#        found links on url, with parser: XYZ
         for found_url in parser.run(url):
             found_url = self.clear_site(found_url,url)
             if self.is_valid(found_url):
                 logger.info('found_url: %s', found_url)
-                if self.index_site(found_url) == len(self.siteslist) - 1 and\
-                   self.current_depth < self.depthRoot: #and\
-                   #self.jobs[self.current_depth + 1][len(self.jobs[self.current_depth + 1])-1] != found_url:
-                    self.jobs[self.current_depth + 1].append(found_url)
+                if self.index_site(found_url) == -1:
+                    self.siteslist.append(found_url)
+                    if self.current_depth < self.depthRoot:
+                        self.jobs[self.current_depth + 1].append(found_url)
                 yield found_url
 
     def analysis(self):
@@ -706,20 +711,19 @@ class Processor(object):
         - incrementing current deep
         - fake tupla -> finish
         """
-        logger.info('URL-Graphs --- START --- v3.0.2')
+        logger.info('URL-Graphs --- START --- v3.1.0')
         self.current_depth = 1
         while True:
             while True:
                 try:
                     url = self.jobs[self.current_depth].pop()
-                    print url
                     parser = self.defSite.get_parser_for(url)
                     logger.info('Site under analysis: %s', url)
                     logger.info('Depth: %d', self.current_depth)
                     url_list = []
                     for found_url in self.run(url,parser):
                         url_list.append(found_url)
-                    print url_list
+
                     yield (url,url_list)
 
                 except IndexError:
@@ -763,7 +767,7 @@ class Tsm(object):
 
         return depthRoot, write_path, read_path, alias_location
 
-    # ----------MAIN -------------
+# ----------MAIN -------------
 
     def main_tsm(self):
         # DEVELOP BRANCH
