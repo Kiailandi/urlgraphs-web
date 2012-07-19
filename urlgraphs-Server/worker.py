@@ -1,9 +1,13 @@
+__author__ = 'Kiailandi'
+
 JOBS_KEY = 'jobs'
 RESULTS_KEY = "res"
+
 
 def get_redis():
     import redis
     return redis.Redis()
+
 
 def main():
     import json
@@ -38,9 +42,11 @@ def main():
             print 'Sequenza siti'
             print tupla_url[1]
             print '\n'*3
-            res = red.rpush(RESULTS_KEY, tupla_url)
+            red.rpush(RESULTS_KEY, json.dumps(tupla_url))
 #       debug
-        red.rpush(RESULTS_KEY, ('status', 'end'))
+        #red.rpush(RESULTS_KEY, 'end')
         print "TANGO DOWN BRO, ALL CLEAR GJ!!"
+
+
 if __name__ == "__main__":
      main()

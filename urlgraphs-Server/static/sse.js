@@ -5,9 +5,13 @@ function SSE(){
 		var eSource = new EventSource("/sse/");
 		//detect message receipt
 		eSource.onmessage = function(event) {
+			//debug
+			console.log(event.data);
+            var results = event.data.replace('{', '').replace('}', '').replace('[', '').replace(']', '')
 			//write the received data to the page
-			document.getElementById("serverData").innerHTML = event.data;
-		};
+			document.getElementById("serverData").innerHTML +=  '<p>' + results + '</p>';
+            return results;
+        };
 	}
 	else {
 		document.getElementById("serverData").innerHTML="Whoops! Your browser doesn't receive server-sent events.";

@@ -687,6 +687,11 @@ class Processor(object):
             logger.warning(inv + 'HTML corrupted: %s', url)
             return False
 
+        except requests.exceptions.TooManyRedirects:
+        #        too many redirects
+            logger.warning(inv + 'too many redirects: %s', url)
+            return False
+
         return True
 
     def run(self, url,parser):

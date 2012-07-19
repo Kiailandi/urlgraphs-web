@@ -1,70 +1,49 @@
-__author__ = 'tommaso'
+__author__ = 'Kiailandi'
 
-from flask import Flask, render_template, url_for, jsonify, request, Response
+from flask import Flask, render_template, url_for, jsonify, request, Response, json, send_from_directory
 
 app = Flask(__name__)
+app.debug = True
 JOBS_KEY = 'jobs'
 RESULTS_KEY = 'res'
 
 
 def get_redis():
     import redis
-
     return redis.Redis()
 
 
 @app.route("/")
 def index():
-    url_for('static', filename='bootstrap.css')
-    url_for('static', filename='bootstrap-responsive.css')
-    url_for('static', filename='docs.css')
-    return render_template('GI.html')
+#    url_for('static', filename='bootstrap.css')
+#    url_for('static', filename='bootstrap-responsive.css')
+#    url_for('static', filename='docs.css')
+#    url_for('static', filename='force.css')
+#    url_for('static', filename='graph.css')
+    return render_template('Index.html')
 
-@app.route("/icencold")
-def winter():
-    return "Brace urself, Winter is comin"
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return "ERROR 404 PAGINA INESISTENTE", 404
+    return "PAGINA INESISTENTE", 404
+
 
 @app.route('/submit/', methods=['POST'])
 def submit():
-    import json
-#   import pdb; pdb.set_trace()
     db = get_redis()
-
-    tmp = request.form
-
-#   cosa schifosa da modificare al piu' presto
-    data = dict()
-
-    data['profondita'] = tmp['profondita']
-    data['timeout'] = tmp['timeout']
-    data ['Turisti_per_caso'] = tmp['Turisti_per_caso']
-    data ['Vbulletin_Topic'] = tmp['Vbulletin_Topic']
-    data ['Vbulletin_Section'] = tmp['Vbulletin_Section']
-    data ['Yahoo_Answer'] = tmp['Yahoo_Answer']
-    data ['All_Ahref'] = tmp['All_Ahref']
-    data ['DiffBot'] = tmp['DiffBot']
-
+    data = dict(request.form)
 #   debug
     print "Data recived:"
-    print data
-
-    urls = tmp['input'].split('\n')
+    print repr(data)
+    print 'prima'
+    print data['url']
+    data['url'] = [url for url in data['url'][0].split('\n') if url]
 #   debug
-    print urls
-
-#   pulisce da eventuali componenti vuote
-    urls = [url for url in urls if url]
-#   semi-schifezza come sopra
-    data['url'] = urls
-#   debug
-    print urls
+    print 'dopo'
+    print data['url']
 
     try:
-        if int(data['profindita']) > 5:
+        if int(data['profondita']) > 5:
             data['profondita'] = 3
     except:
         data['profondita'] = 3
@@ -81,56 +60,9 @@ def submit():
 #       dubug
         print data['timeout']
 
-#   Correzione tipo valori da stringhe a booleani (cercare metodo migliore)
-    if  data ['Turisti_per_caso'] == 'false':
-        data ['Turisti_per_caso'] = False
-    else:
-        data ['Turisti_per_caso'] = True
-
-    if  data ['Vbulletin_Topic'] == 'false':
-        data ['Vbulletin_Topic'] = False
-    else:
-        data ['Vbulletin_Topic'] = True
-
-    if  data ['Vbulletin_Section'] == 'false':
-        data ['Vbulletin_Section'] = False
-    else:
-        data ['Vbulletin_Section'] = True
-
-    if  data ['Yahoo_Answer'] == 'false':
-        data ['Yahoo_Answer'] = False
-    else:
-        data ['Yahoo_Answer'] = True
-
-    if  data ['All_Ahref'] == 'false':
-        data ['All_Ahref'] = False
-    else:
-        data ['All_Ahref'] = True
-
-    if  data ['DiffBot'] == 'false':
-        data ['DiffBot'] = False
-    else:
-        data ['DiffBot'] = True
-
-        #   da migliorare, sintassi dispersiva
-    if  data ['Turisti_per_caso'] == False and   \
-        data ['Vbulletin_Topic'] == False and    \
-        data ['Vbulletin_Section'] == False and  \
-        data ['Yahoo_Answer'] == False and       \
-        data ['All_Ahref'] == False and          \
-        data ['DiffBot'] == False:
-        data ['DiffBot'] = True
-#       debug
-        print data ['DiffBot']
-
-#   urls = ['http://www.google.com', 'www.facebook.com']
-#    data = dict(
-#      timeout=30.,
-#      urls=urls,
-#    )
-
     db.rpush(JOBS_KEY, json.dumps(data))
     return jsonify(success=True)
+
 
 @app.route('/sse/')
 def sse():
@@ -138,20 +70,23 @@ def sse():
         red = get_redis()
         while True:
 #           debug
-            print "sto per fare la blpop"
-            res = red.blpop(RESULTS_KEY,30)
+            print 'sto per fare la blpop'
+            res = (RESULTS_KEY, json.loads(red.blpop(RESULTS_KEY)[1]))
 #           debug
-            print "blpop fatta"
-            # elaboro res
-#           debug
+            print 'blpop fatta'
             print repr(res)
-            yield res
-            if res[1][1] == 'end':
-                break
-#       debug
-        print 'tutto ok'
-    return Response(generate())
-
+            print 'sto per yieldare'
+            yield 'data: ' + json.dumps( { res[1][0] : res[1][1] })  + '\n\n'
+#           debug
+            print "Ho yieldato"
+#           debug
+            print '\n'
+#           debug
+            #if(res[1] == 'end'):
+                #print 'fine'
+#   debug
+    print 'sto aspettando'
+    return Response(generate(), mimetype = "text/event-stream")
 
 if __name__ == "__main__":
     app.run(debug=True)
