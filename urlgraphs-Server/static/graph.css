@@ -22,10 +22,10 @@ circle {
     stroke-width: 1.5px;
 }
 
-text {
-    font: 10px sans-serif;
-    pointer-events: none;
-}
+/*text {*/
+    /*font: 10px sans-serif;*/
+    /*pointer-events: none;*/
+/*}*/
 
 text.shadow {
     stroke: #fff;
