@@ -108,10 +108,16 @@ function Graph(){
 
         var n1 = {id: l1};
         console.log(contains_node(n1, nodes))
-        test ? expression1 : expression2
         if(contains_node(n1, nodes) == -1) {
             console.log(n1);
             nodes.push(n1);
+        }
+        else{
+            $(nodes).each(function(){
+                if(this.id === n1.id) {
+                    n1 = this;
+                }
+            });
         }
 
         var n2 = {id: l2};
@@ -120,12 +126,26 @@ function Graph(){
             console.log(n2)
             nodes.push(n2);
         }
+        else{
+            $(nodes).each(function(){
+                if(this.id === n2.id) {
+                    n2 = this;
+                }
+            });
+        }
 
         var l12 = {source: n1, target: n2};
         console.log(contains_link(l12, links))
         if(contains_link(l12, links) == -1) {
             console.log(l12);
             links.push(l12);
+        }
+        else{
+            $(links).each(function(){
+                if(this.source === l12.source && this.target === l12.target){
+                    ret = 1
+                }
+            });
         }
 
         force
