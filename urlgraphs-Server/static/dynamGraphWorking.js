@@ -3,8 +3,8 @@ function Graph(){
     var w = 1500,
         h = 1400,
         gravity = 0.05,
-        distance = 15,
-        charge = -15,
+        distance = 100,
+        charge = -100
         nodes = [],
         links = [],
         vis = d3.select("#chart")
@@ -60,8 +60,7 @@ function Graph(){
 
         nodeEnter.append("svg:image")
             .attr("class", "circle")
-            //"https://d3nwyuy0nl342s.cloudfront.net/images/icons/public.png
-            .attr("xlink:href", "http://www.h-old.com/images/cerchio_verde.png")
+            .attr("xlink:href", "https://d3nwyuy0nl342s.cloudfront.net/images/icons/public.png")
             .attr("x", "-8px")
             .attr("y", "-8px")
             .attr("width", "16px")
@@ -77,50 +76,29 @@ function Graph(){
 
         node.exit().remove();
 
-//        force
-//            .nodes(nodes)
-//            .links(links)
-//            .start();
+        force
+            .nodes(nodes)
+            .links(links)
+            .start();
     }
 
-//    function contains_node(node, nodes){
-//        //FIXME;
-//        var ret = -1;
-//        $(nodes).each(function(){
-//            if(this.id === node.id) {
-//                ret = 1;
-//            }
-//        });
-//        return ret;
-//    }
-//
-//    function contains_link(link, links){
-//        //FIXME;
-//        var ret = -1;
-//        $(links).each(function(){
-//            if(this.source === link.source && this.target === link.target){
-//                ret = 1
-//            }
-//        });
-//        return ret;
-//    }
-
-    function contains_node(nodeID, nodes){
-
-        var ret = {id: nodeID};
+    function contains_node(node, nodes){
+        //FIXME;
+        var ret = -1;
         $(nodes).each(function(){
-            if(this.id === ret.id) {
-                ret = 0;
+            if(this.id === node.id) {
+                ret = 1;
             }
         });
         return ret;
     }
 
-    function contains_link(linkS, linkT, links){
-        var ret = {source: linkS, target: linkT};
+    function contains_link(link, links){
+        //FIXME;
+        var ret = -1;
         $(links).each(function(){
-            if(this.source === ret.source && this.target === ret.target){
-                ret = 0;
+            if(this.source === link.source && this.target === link.target){
+                ret = 1
             }
         });
         return ret;
@@ -128,59 +106,46 @@ function Graph(){
 
     function Add(l1, l2) {
 
-//        var n1 = {id: l1};
-//        if(contains_node(n1, nodes) == -1) {
-//            console.log(n1);
-//            nodes.push(n1);
-//        }
-//        else{
-//            $(nodes).each(function(){
-//                if(this.id === n1.id) {
-//                    n1 = this;
-//                }
-//            });
-//        }
-
-//        var n2 = {id: l2};
-//        if(contains_node(n2, nodes) == -1) {
-//            console.log(n2)
-//            nodes.push(n2);
-//        }
-//        else{
-//            $(nodes).each(function(){
-//                if(this.id === n2.id) {
-//                    n2 = this;
-//                }
-//            });
-//        }
-//
-//        var l12 = {source: n1, target: n2};
-//        if(contains_link(l12, links) == -1) {
-//            console.log(l12);
-//            links.push(l12);
-//        }
-//        else{
-//            $(links).each(function(){
-//                if(this.source === l12.source && this.target === l12.target){
-//                    l12 = this;
-//                }
-//            });
-//        }
-
-
-        var n1 = contains_node(l1, nodes);
-        if(n1 != 0) {
-           nodes.push(n1);
+        var n1 = {id: l1};
+        console.log(contains_node(n1, nodes))
+        if(contains_node(n1, nodes) == -1) {
+            console.log(n1);
+            nodes.push(n1);
+        }
+        else{
+            $(nodes).each(function(){
+                if(this.id === n1.id) {
+                    n1 = this;
+                }
+            });
         }
 
-        var n2 = contains_node(l2, nodes);
-        if(n2 != 0) {
+        var n2 = {id: l2};
+        console.log(contains_node(n2, nodes))
+        if(contains_node(n2, nodes) == -1) {//
+            console.log(n2)
             nodes.push(n2);
         }
+        else{
+            $(nodes).each(function(){
+                if(this.id === n2.id) {
+                    n2 = this;
+                }
+            });
+        }
 
-        var l12 = contains_link(l1, l2, links);
-        if(l12 != 0) {
+        var l12 = {source: n1, target: n2};
+        console.log(contains_link(l12, links))
+        if(contains_link(l12, links) == -1) {
+            console.log(l12);
             links.push(l12);
+        }
+        else{
+            $(links).each(function(){
+                if(this.source === l12.source && this.target === l12.target){
+                    ret = 1
+                }
+            });
         }
 
         force
@@ -191,11 +156,11 @@ function Graph(){
     }
 
     window.add = Add
-//
-//    force
-//        .nodes(nodes)
-//        .links(links)
-//        .start();
-//    recalc();
+
+    force
+        .nodes(nodes)
+        .links(links)
+        .start();
+    recalc();
 }
 

@@ -6,11 +6,11 @@ function SSE(){
 		//detect message receipt
 		eSource.onmessage = function(event) {
 			//debug
-			console.log(event.data);
-            var results = event.data.replace('{', '').replace('}', '').replace('[', '').replace(']', '')
+//			console.log(event.data);
+            var results = event.data.replace('{', '').replace('}', '').replace('[', '').replace(']', '');
 			//write the received data to the page
 			document.getElementById("serverData").innerHTML +=  '<p>' + results + '</p>';
-            return results;
+            SendToGraph(results);
         };
 	}
 	else {
