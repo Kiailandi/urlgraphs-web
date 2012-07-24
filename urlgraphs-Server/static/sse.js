@@ -10,7 +10,8 @@ function SSE(){
             var results = event.data.replace('{', '').replace('}', '').replace('[', '').replace(']', '');
 			//write the received data to the page
 			document.getElementById("serverData").innerHTML +=  '<p>' + results + '</p>';
-            SendToGraph(results);
+            //SendToGraph(results);
+            window.add(results);
         };
 	}
 	else {

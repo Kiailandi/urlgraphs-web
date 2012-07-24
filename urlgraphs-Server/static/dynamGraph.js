@@ -83,111 +83,119 @@ function Graph(){
 //            .start();
     }
 
-//    function contains_node(node, nodes){
-//        //FIXME;
-//        var ret = -1;
+    function contains_node(node, nodes){
+        //FIXME;
+        var ret = -1;
+        $(nodes).each(function(){
+            if(this.id === node.id) {
+                ret = 1;
+            }
+        });
+        return ret;
+    }
+
+    function contains_link(link, links){
+        //FIXME;
+        var ret = -1;
+        $(links).each(function(){
+            if(this.source === link.source && this.target === link.target){
+                ret = 1
+            }
+        });
+        return ret;
+    }
+
+//    function contains_node(nodeID, nodes){
+//
+//        var ret = {id: nodeID};
 //        $(nodes).each(function(){
-//            if(this.id === node.id) {
-//                ret = 1;
+//            if(this.id === ret.id) {
+//                ret = 0;
 //            }
 //        });
 //        return ret;
 //    }
 //
-//    function contains_link(link, links){
-//        //FIXME;
-//        var ret = -1;
+//    function contains_link(linkS, linkT, links){
+//        var ret = {source: linkS, target: linkT};
 //        $(links).each(function(){
-//            if(this.source === link.source && this.target === link.target){
-//                ret = 1
+//            if(this.source === ret.source && this.target === ret.target){
+//                ret = 0;
 //            }
 //        });
 //        return ret;
 //    }
 
-    function contains_node(nodeID, nodes){
+    function Add(res) {
 
-        var ret = {id: nodeID};
-        $(nodes).each(function(){
-            if(this.id === ret.id) {
-                ret = 0;
+        if(res != undefined){
+            console.log(res);
+            res = res.replace(/"/g, '');
+            res = res.replace(':', '*');
+            res = res.replace(':', '*');
+            res = res.replace('*', ':');
+            var source = res.split('*');
+            var targets = source[1].split(',');
+
+            var n1 = {id: source[0]};
+            if(contains_node(n1, nodes) == -1) {
+                nodes.push(n1);
             }
-        });
-        return ret;
-    }
-
-    function contains_link(linkS, linkT, links){
-        var ret = {source: linkS, target: linkT};
-        $(links).each(function(){
-            if(this.source === ret.source && this.target === ret.target){
-                ret = 0;
+            else{
+                $(nodes).each(function(){
+                    if(this.id === n1.id) {
+                        n1 = this;
+                    }
+                });
             }
-        });
-        return ret;
-    }
 
-    function Add(l1, l2) {
+            for (var i in targets){
+                var n2 = {id: targets[i]};
+                if(contains_node(n2, nodes) == -1) {
+                    nodes.push(n2);
+                }
+                else{
+                    $(nodes).each(function(){
+                        if(this.id === n2.id) {
+                            n2 = this;
+                        }
+                    });
+                }
 
-//        var n1 = {id: l1};
-//        if(contains_node(n1, nodes) == -1) {
-//            console.log(n1);
-//            nodes.push(n1);
-//        }
-//        else{
-//            $(nodes).each(function(){
-//                if(this.id === n1.id) {
-//                    n1 = this;
-//                }
-//            });
-//        }
+                var l12 = {source: n1, target: n2};
+                if(contains_link(l12, links) == -1) {
+                    links.push(l12);
+                }
+                else{
+                    $(links).each(function(){
+                        if(this.source === l12.source && this.target === l12.target){
+                            l12 = this;
+                        }
+                    });
+                }
 
-//        var n2 = {id: l2};
-//        if(contains_node(n2, nodes) == -1) {
-//            console.log(n2)
+                force
+                    .nodes(nodes)
+                    .links(links)
+                    .start();
+                recalc();
+            }
+        }
+
+//        var n1 = contains_node(source[0], nodes);
+//        if(n1 != 0) {
+//        nodes.push(n1);
+//
+//        var n2 = contains_node(targets[i], nodes);
+//        if(n2 != 0) {
 //            nodes.push(n2);
 //        }
-//        else{
-//            $(nodes).each(function(){
-//                if(this.id === n2.id) {
-//                    n2 = this;
-//                }
-//            });
-//        }
 //
-//        var l12 = {source: n1, target: n2};
-//        if(contains_link(l12, links) == -1) {
-//            console.log(l12);
+//        var l12 = contains_link(l1, l2, links);
+//        if(l12 != 0) {
 //            links.push(l12);
 //        }
-//        else{
-//            $(links).each(function(){
-//                if(this.source === l12.source && this.target === l12.target){
-//                    l12 = this;
-//                }
-//            });
-//        }
 
-
-        var n1 = contains_node(l1, nodes);
-        if(n1 != 0) {
-           nodes.push(n1);
-        }
-
-        var n2 = contains_node(l2, nodes);
-        if(n2 != 0) {
-            nodes.push(n2);
-        }
-
-        var l12 = contains_link(l1, l2, links);
-        if(l12 != 0) {
-            links.push(l12);
-        }
-
-        force
-            .nodes(nodes)
-            .links(links)
-            .start();
-        recalc();
     }
 
     window.add = Add
