@@ -143,7 +143,7 @@ function Graph(){
         else{
             $(links).each(function(){
                 if(this.source === l12.source && this.target === l12.target){
-                    ret = 1
+                    l12 = this;
                 }
             });
         }

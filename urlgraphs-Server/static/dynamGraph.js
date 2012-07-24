@@ -1,34 +1,35 @@
 function Graph(){
 
-    var w = 1500,
-        h = 1400,
-        gravity = 0.05,
-        distance = 15,
-        charge = -15,
-        nodes = [],
-        links = [],
-        vis = d3.select("#chart")
-                .append("svg:svg")
-                .attr("width", w)
-                .attr("height", h);
+    var w = 1500
+        , h = 1400
+        , gravity = 0.05
+        , distance = 30
+        , charge = -20
+        , nodes = []
+        , links = []
+        , vis = d3.select("#chart")
+                  .append("svg:svg")
+                  .attr("width", w)
+                  .attr("height", h)
 
-    var force = d3.layout.force()
+        , force = d3.layout.force()
                     .nodes(nodes)
                     .links(links)
                     .gravity(gravity)
                     .distance(distance)
                     .charge(charge)
-                    .size([w, h]);
+                    .size([w, h])
     
     force.on("tick", function() {
         var node = vis.selectAll("g.node")
                       .data(nodes, function(d) {
                                         return d.id;
                                    }
-                       );
+                       )
 
-        var link = vis.selectAll("line.link")
-            .data(links, function(d) { return d.source.id + ',' + d.target.id})
+            , link = vis.selectAll("line.link")
+                        .data(links, function(d) { return d.source.id + ',' + d.target.id})
+
         link.attr("x1", function(d) { return d.source.x; })
             .attr("y1", function(d) { return d.source.y; })
             .attr("x2", function(d) { return d.target.x; })
@@ -71,65 +72,39 @@ function Graph(){
             .attr("class", "nodetext")
             .attr("dx", 12)
             .attr("dy", ".35em")
-            //.text(function(d) { return d.id });
         nodeEnter.append("title")
             .text(function(d) { return d.id; });
 
         node.exit().remove();
-
-//        force
-//            .nodes(nodes)
-//            .links(links)
-//            .start();
     }
 
-    function contains_node(node, nodes){
-        //FIXME;
-        var ret = -1;
-        $(nodes).each(function(){
-            if(this.id === node.id) {
-                ret = 1;
-            }
-        });
-        return ret;
+    var node_cache = [];
+    function get_or_add_node(id) {
+        if (node_cache[id] === undefined) {
+            node_cache[id] = { id : id };
+            nodes.push(node_cache[id]);
+        }
+        return node_cache[id];
     }
 
-    function contains_link(link, links){
-        //FIXME;
-        var ret = -1;
-        $(links).each(function(){
-            if(this.source === link.source && this.target === link.target){
-                ret = 1
-            }
-        });
-        return ret;
+    var link_cache = [];
+    function get_or_add_link(source, target) {
+        if (link_cache[source.id] === undefined) {
+            link_cache[source.id] = [];
+        }
+        if (link_cache[source.id][target.id] === undefined) {
+            link_cache[source.id][target.id] = { source: source, target: target };
+            links.push(link_cache[source.id][target.id]);
+        }
+        return link_cache[source.id][target.id];
     }
-
-//    function contains_node(nodeID, nodes){
-//
-//        var ret = {id: nodeID};
-//        $(nodes).each(function(){
-//            if(this.id === ret.id) {
-//                ret = 0;
-//            }
-//        });
-//        return ret;
-//    }
-//
-//    function contains_link(linkS, linkT, links){
-//        var ret = {source: linkS, target: linkT};
-//        $(links).each(function(){
-//            if(this.source === ret.source && this.target === ret.target){
-//                ret = 0;
-//            }
-//        });
-//        return ret;
-//    }
 
     function Add(res) {
+        var n1
+            , n2
+
 
         if(res != undefined){
-            console.log(res);
             res = res.replace(/"/g, '');
             res = res.replace(':', '*');
             res = res.replace(':', '*');
@@ -137,73 +112,21 @@ function Graph(){
             var source = res.split('*');
             var targets = source[1].split(',');
 
-            var n1 = {id: source[0]};
-            if(contains_node(n1, nodes) == -1) {
-                nodes.push(n1);
-            }
-            else{
-                $(nodes).each(function(){
-                    if(this.id === n1.id) {
-                        n1 = this;
-                    }
-                });
-            }
 
-            for (var i in targets){
-                var n2 = {id: targets[i]};
-                if(contains_node(n2, nodes) == -1) {
-                    nodes.push(n2);
-                }
-                else{
-                    $(nodes).each(function(){
-                        if(this.id === n2.id) {
-                            n2 = this;
-                        }
-                    });
-                }
+            n1 = get_or_add_node(source[0]);
 
-                var l12 = {source: n1, target: n2};
-                if(contains_link(l12, links) == -1) {
-                    links.push(l12);
-                }
-                else{
-                    $(links).each(function(){
-                        if(this.source === l12.source && this.target === l12.target){
-                            l12 = this;
-                        }
-                    });
-                }
-
-                force
-                    .nodes(nodes)
-                    .links(links)
-                    .start();
-                recalc();
+            for (var i in targets) {
+                n2 = get_or_add_node(targets[i]);
+                get_or_add_link(n1, n2);
             }
         }
-
-//        var n1 = contains_node(source[0], nodes);
-//        if(n1 != 0) {
-//        nodes.push(n1);
-//
-//        var n2 = contains_node(targets[i], nodes);
-//        if(n2 != 0) {
-//            nodes.push(n2);
-//        }
-//
-//        var l12 = contains_link(l1, l2, links);
-//        if(l12 != 0) {
-//            links.push(l12);
-//        }
-
+        force
+            .nodes(nodes)
+            .links(links)
+            .start();
+        recalc();
     }
 
-    window.add = Add
-//
-//    force
-//        .nodes(nodes)
-//        .links(links)
-//        .start();
-//    recalc();
+    window.add = Add;
 }
 
