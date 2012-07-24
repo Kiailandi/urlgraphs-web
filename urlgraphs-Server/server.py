@@ -15,11 +15,6 @@ def get_redis():
 
 @app.route("/")
 def index():
-#    url_for('static', filename='bootstrap.css')
-#    url_for('static', filename='bootstrap-responsive.css')
-#    url_for('static', filename='docs.css')
-#    url_for('static', filename='force.css')
-#    url_for('static', filename='graph.css')
     return render_template('Index.html')
 
 
