@@ -2,9 +2,9 @@ function Graph(){
 
     var w = 1500
         , h = 1400
-        , gravity = 0.05
-        , distance = 30
-        , charge = -20
+        , gravity = 0.02
+        , distance = 17
+        , charge = -7
         , nodes = []
         , links = []
         , vis = d3.select("#chart")
@@ -61,7 +61,6 @@ function Graph(){
 
         nodeEnter.append("svg:image")
             .attr("class", "circle")
-            //"https://d3nwyuy0nl342s.cloudfront.net/images/icons/public.png
             .attr("xlink:href", "http://www.h-old.com/images/cerchio_verde.png")
             .attr("x", "-8px")
             .attr("y", "-8px")
@@ -88,36 +87,28 @@ function Graph(){
     }
 
     var link_cache = [];
-    function get_or_add_link(source, target) {
+    function get_or_add_link(source, target, depth) {
         if (link_cache[source.id] === undefined) {
             link_cache[source.id] = [];
         }
         if (link_cache[source.id][target.id] === undefined) {
-            link_cache[source.id][target.id] = { source: source, target: target };
+            link_cache[source.id][target.id] = { source: source, target: target, depth: depth };
             links.push(link_cache[source.id][target.id]);
         }
         return link_cache[source.id][target.id];
     }
 
-    function Add(res) {
+    function Add(source, targets, depth) {
         var n1
             , n2
 
+        if(source != undefined && targets != undefined && depth != undefined){
 
-        if(res != undefined){
-            res = res.replace(/"/g, '');
-            res = res.replace(':', '*');
-            res = res.replace(':', '*');
-            res = res.replace('*', ':');
-            var source = res.split('*');
-            var targets = source[1].split(',');
-
-
-            n1 = get_or_add_node(source[0]);
+            n1 = get_or_add_node(source);
 
             for (var i in targets) {
                 n2 = get_or_add_node(targets[i]);
-                get_or_add_link(n1, n2);
+                get_or_add_link(n1, n2, depth);
             }
         }
         force

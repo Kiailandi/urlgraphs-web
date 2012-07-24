@@ -479,7 +479,7 @@ def get(url, timeout=30, **kwargs):
 class Processor(object):
 #    links search engine
     depthRoot = 1
-    current_depth = 1
+    current_depth = 0
     siteslist = []
     defSite = DefSites()
     jobs = defaultdict(list)
@@ -729,7 +729,7 @@ class Processor(object):
                     for found_url in self.run(url,parser):
                         url_list.append(found_url)
 
-                    yield (url,url_list)
+                    yield (url,url_list, self.current_depth)
 
                 except IndexError:
                     break
@@ -762,7 +762,7 @@ class Tsm(object):
 
         # check option (depth)
         if options.depth is None or options.depth <= 0:
-            depthRoot = 1
+            depthRoot = 3
         else:
             depthRoot = int(options.depth)
 

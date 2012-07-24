@@ -14,13 +14,12 @@ def main():
     red = get_redis()
     while True:
         job = red.blpop(JOBS_KEY)
+#       debug
         print job[1]
         data = json.loads(job[1])
 
-#       elaborazione
         from site_analysis import Processor
 
-#       Filtraggio e correzione link in ingresso prima dell'invio
         urls = data['url']
         for url in urls:
             if not url.startswith("http://"):
@@ -41,11 +40,12 @@ def main():
             print '\n'
             print 'Sequenza siti'
             print tupla_url[1]
+            print '\n'
+            print 'Profondita', tupla_url[2]
             print '\n'*3
             red.rpush(RESULTS_KEY, json.dumps(tupla_url))
-#       debug
-        #red.rpush(RESULTS_KEY, 'end')
-        print "TANGO DOWN BRO, ALL CLEAR GJ!!"
+
+        print "END"
 
 
 if __name__ == "__main__":

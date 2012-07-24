@@ -1,6 +1,6 @@
 __author__ = 'Kiailandi'
 
-from flask import Flask, render_template, url_for, jsonify, request, Response, json, send_from_directory
+from flask import Flask, render_template, jsonify, request, Response, json
 
 app = Flask(__name__)
 app.debug = True
@@ -71,14 +71,15 @@ def sse():
             print 'blpop fatta'
             print repr(res)
             print 'sto per yieldare'
-            yield 'data: ' + json.dumps( { res[1][0] : res[1][1] })  + '\n\n'
+            yield 'data: ' + json.dumps( {
+                'source': res[1][0],
+                'target': res[1][1],
+                'depth': res[1][2],
+            }) + '\n\n'
 #           debug
             print "Ho yieldato"
 #           debug
             print '\n'
-#           debug
-            #if(res[1] == 'end'):
-                #print 'fine'
 #   debug
     print 'sto aspettando'
     return Response(generate(), mimetype = "text/event-stream")
