@@ -6,7 +6,7 @@ function SSE(){
 			document.getElementById("serverData").innerHTML +=  '<p>' + res.source + ':' + res.target + '</p>';
             setInterval(function()
             {
-                window.add(res.source, res.target, res.depth)}, 2500);
+                window.add(res.source, res.target, res.depth)}, 2000);
         };
 	}
 	else {

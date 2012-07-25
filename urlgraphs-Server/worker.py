@@ -16,7 +16,7 @@ def main():
         job = red.blpop(JOBS_KEY)
 #       debug
         print job[1]
-        data = json.loads(job[1])
+        data = dict(json.loads(job[1]))
 
         from site_analysis import Processor
 
@@ -30,12 +30,13 @@ def main():
         print data['profondita']
 #       debug
         print data['url']
-        process = Processor(data['url'], data['profondita'],data['Vbulletin_Section'],
+        process = Processor(data['url'], int(data['profondita']), data['Vbulletin_Section'],
                             data['Vbulletin_Topic'], data['Yahoo_Answer'], data['Turisti_per_caso'], data['DiffBot'],
-                            data['All_Ahref'], data['timeout'])
-
+                            data['All_Ahref'], int(data['timeout']))
+        print 'depthroot', process.depthRoot, 'depth', process.current_depth
         for tupla_url in process.analysis():
 #           debug [all]
+            print 'depthroot', process.depthRoot, 'depth', process.current_depth
             print '\n'
             print 'Sito Iniziale'
             print tupla_url[0]

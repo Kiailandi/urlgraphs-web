@@ -479,7 +479,7 @@ def get(url, timeout=30, **kwargs):
 class Processor(object):
 #    links search engine
     depthRoot = 1
-    current_depth = 0
+    current_depth = 1
     siteslist = []
     defSite = DefSites()
     jobs = defaultdict(list)
@@ -496,7 +496,7 @@ class Processor(object):
                                __AlLink=False,
                                timeout=30):
 
-        timeout = int(timeout)
+        timeout = timeout
         # parser define
         if __VBulletin_Section:
             self.defSite.register(VBulletin_Section(timeout))

@@ -3,8 +3,8 @@ function Graph(){
     var w = 1500
         , h = 1400
         , gravity = 0.02
-        , distance = 17
-        , charge = -7
+        , distance = 20
+        , charge = -10
         , nodes = []
         , links = []
         , vis = d3.select("#chart")
