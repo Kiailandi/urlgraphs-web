@@ -11,7 +11,7 @@ function Graph(){
             .append("svg:svg")
             .attr("width", w)
             .attr("height", h)
-
+        , color = d3.scale.category10()
         , force = d3.layout.force()
             .nodes(nodes)
             .links(links)
@@ -48,7 +48,8 @@ function Graph(){
             .attr("x1", function(d) { return d.source.x; })
             .attr("y1", function(d) { return d.source.y; })
             .attr("x2", function(d) { return d.target.x; })
-            .attr("y2", function(d) { return d.target.y; });
+            .attr("y2", function(d) { return d.target.y; })
+            .style("stroke", function(d) {return color(d.depth);});
 
         link.exit().remove();
 

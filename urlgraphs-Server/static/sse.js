@@ -4,9 +4,7 @@ function SSE(){
 		eSource.onmessage = function(event) {
             var res = $.parseJSON(event.data)
 			document.getElementById("serverData").innerHTML +=  '<p>' + res.source + ':' + res.target + '</p>';
-            setInterval(function()
-            {
-                window.add(res.source, res.target, res.depth)}, 2000);
+            window.add(res.source, res.target, res.depth);
         };
 	}
 	else {
