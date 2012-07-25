@@ -495,8 +495,7 @@ class Processor(object):
                                __GenericLink=False,
                                __AlLink=False,
                                timeout=30):
-
-        timeout = timeout
+        logger.warning(__VBulletin_Section)
         # parser define
         if __VBulletin_Section:
             self.defSite.register(VBulletin_Section(timeout))

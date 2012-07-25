@@ -8,27 +8,27 @@ function Graph(){
         , nodes = []
         , links = []
         , vis = d3.select("#chart")
-            .append("svg:svg")
-            .attr("width", w)
-            .attr("height", h)
+                  .append("svg:svg")
+                  .attr("width", w)
+                  .attr("height", h)
 
         , force = d3.layout.force()
-            .nodes(nodes)
-            .links(links)
-            .gravity(gravity)
-            .distance(distance)
-            .charge(charge)
-            .size([w, h])
-
+                    .nodes(nodes)
+                    .links(links)
+                    .gravity(gravity)
+                    .distance(distance)
+                    .charge(charge)
+                    .size([w, h])
+    
     force.on("tick", function() {
         var node = vis.selectAll("g.node")
-                .data(nodes, function(d) {
-                    return d.id;
-                }
-            )
+                      .data(nodes, function(d) {
+                                        return d.id;
+                                   }
+                       )
 
             , link = vis.selectAll("line.link")
-                .data(links, function(d) { return d.source.id + ',' + d.target.id})
+                        .data(links, function(d) { return d.source.id + ',' + d.target.id})
 
         link.attr("x1", function(d) { return d.source.x; })
             .attr("y1", function(d) { return d.source.y; })
@@ -77,7 +77,6 @@ function Graph(){
         node.exit().remove();
     }
 
-
     var node_cache = [];
     function get_or_add_node(id) {
         if (node_cache[id] === undefined) {
@@ -88,28 +87,36 @@ function Graph(){
     }
 
     var link_cache = [];
-    function get_or_add_link(source, target, depth) {
+    function get_or_add_link(source, target) {
         if (link_cache[source.id] === undefined) {
             link_cache[source.id] = [];
         }
         if (link_cache[source.id][target.id] === undefined) {
-            link_cache[source.id][target.id] = { source: source, target: target, depth: depth };
+            link_cache[source.id][target.id] = { source: source, target: target };
             links.push(link_cache[source.id][target.id]);
         }
         return link_cache[source.id][target.id];
     }
 
-    function Add(source, targets, depth) {
+    function Add(res) {
         var n1
             , n2
 
-        if(source != undefined && targets != undefined && depth != undefined){
 
-            n1 = get_or_add_node(source);
+        if(res != undefined){
+            res = res.replace(/"/g, '');
+            res = res.replace(':', '*');
+            res = res.replace(':', '*');
+            res = res.replace('*', ':');
+            var source = res.split('*');
+            var targets = source[1].split(',');
+
+
+            n1 = get_or_add_node(source[0]);
 
             for (var i in targets) {
                 n2 = get_or_add_node(targets[i]);
-                get_or_add_link(n1, n2, depth);
+                get_or_add_link(n1, n2);
             }
         }
         force
