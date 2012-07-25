@@ -36,7 +36,8 @@ def submit():
 #   debug
     print 'dopo'
     print data['url']
-
+    data['profondita'] = data['profondita'][0]
+    data['timeout'] = data['timeout'][0]
     try:
         if int(data['profondita']) > 5:
             data['profondita'] = 3

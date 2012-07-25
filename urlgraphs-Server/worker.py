@@ -25,7 +25,9 @@ def main():
             if not url.startswith("http://"):
                urls[urls.index(url)] = "http://" + url
         data['url'] = urls
-
+        #debug
+        print data['timeout']
+        print data['profondita']
 #       debug
         print data['url']
         process = Processor(data['url'], data['profondita'],data['Vbulletin_Section'],
