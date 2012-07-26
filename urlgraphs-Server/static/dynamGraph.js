@@ -1,10 +1,10 @@
 function Graph(){
 
     var w = 1500
-        , h = 1400
-        , gravity = 0.25
-        , distance = 30
-        , charge = -7
+        , h = 1200
+        , gravity = 0.05
+        , distance = 15
+        , charge = -10
         , nodes = []
         , links = []
         , vis = d3.select("#chart")

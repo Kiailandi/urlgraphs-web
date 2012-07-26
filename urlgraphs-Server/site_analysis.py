@@ -610,7 +610,11 @@ class Processor(object):
             logger.warning(inv + 'javascript URL: %s', url)
             return False
 
-    #   http://www.fassaforum.com/attachment.php?s=0f2a782eb8404a03f30d91df3d7f7ca5&attachmentid=702&d=1280593484
+        if url.find('PopupPic(') != -1:
+            logger.warning(inv + 'Popup Pic URL: %s', url)
+            return  False
+
+            #   http://www.fassaforum.com/attachment.php?s=0f2a782eb8404a03f30d91df3d7f7ca5&attachmentid=702&d=1280593484
         if  url.find('showthread.php') != -1 or url.find('attachment.php') != -1:
     #        post reply / login page
             logger.warning(inv + 'post\'s reply or login page: (showthread or attachment): %s', url)

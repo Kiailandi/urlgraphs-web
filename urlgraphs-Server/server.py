@@ -39,19 +39,19 @@ def submit():
     data['profondita'] = data['profondita'][0]
     data['timeout'] = data['timeout'][0]
     try:
-        if int(data['profondita']) > 5:
-            data['profondita'] = 3
+        if int(data['profondita']) > 4:
+            data['profondita'] = 4
     except:
-        data['profondita'] = 3
+        data['profondita'] = 4
     finally:
 #       dubug
         print data['profondita']
 
     try:
-        if int(data['timeout']) > 120:
-            data['timeout'] = 30
+        if int(data['timeout']) > 60:
+            data['timeout'] = 60
     except:
-        data['timeout'] = 30.
+        data['timeout'] = 60.
     finally:
 #       dubug
         print data['timeout']
