@@ -1,6 +1,7 @@
 $(document).ready(function()
 {
     $('input#sts').click(function(){
+        $('#depthreached').text(0);
         $.post('/submit/', { "profondita"         : $('textarea[name=profondita]').val(),
                               "timeout"           : $('textarea[name=timeout]').val(),
                               "url"               : $('textarea[name=input]').val(),

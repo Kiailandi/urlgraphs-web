@@ -19,14 +19,14 @@ def main():
         data = dict(json.loads(job[1]))
         print repr(data)
         print '=' * 80
-#        for var in data.items():
-#            print var
-#            print var[1][0]
-#            if var[1][0] == 'false':
-#                data[var[0]] = False
-#            elif var[1][0] == 'true':
-#                data[var[0]] = True
-#            print data[var[0]]
+        for var in data.items():
+            print var
+            print var[1][0]
+            if var[1][0] == 'false':
+                data[var[0]] = False
+            elif var[1][0] == 'true':
+                data[var[0]] = True
+            print data[var[0]]
         print '=' * 80
         print data
         from site_analysis import Processor

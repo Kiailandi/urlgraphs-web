@@ -495,12 +495,6 @@ class Processor(object):
                                __GenericLink=False,
                                __AlLink=False,
                                timeout=30):
-        logger.warning(__VBulletin_Section)
-        logger.warning(__VBulletin_Topic)
-        logger.warning(__YahooAnswer)
-        logger.warning(__TuristiPerCaso)
-        logger.warning(__GenericLink)
-        logger.warning(__AlLink)
         # parser define
         if __VBulletin_Section:
             self.defSite.register(VBulletin_Section(timeout))
