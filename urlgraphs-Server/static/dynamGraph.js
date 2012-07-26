@@ -2,9 +2,9 @@ function Graph(){
 
     var w = 1500
         , h = 1400
-        , gravity = 0.05
-        , distance = 25
-        , charge = -30
+        , gravity = 0.25
+        , distance = 30
+        , charge = -7
         , nodes = []
         , links = []
         , vis = d3.select("#chart")
