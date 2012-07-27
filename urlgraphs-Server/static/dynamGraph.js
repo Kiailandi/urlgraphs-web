@@ -68,6 +68,10 @@ function Graph(){
             .attr("width", "16px")
             .attr("height", "16px");
 
+//        node.append("circle")
+//            .attr("r", 4.5)
+//            .style("fill", function(d) { return color(group); });
+
         nodeEnter.append("svg:text")
             .attr("class", "nodetext")
             .attr("dx", 12)

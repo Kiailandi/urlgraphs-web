@@ -85,5 +85,11 @@ def sse():
     print 'sto aspettando'
     return Response(generate(), mimetype = "text/event-stream")
 
+@app.route('/dlres/', methods=['GET'])
+def dlres():
+    red = get_redis()
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)
