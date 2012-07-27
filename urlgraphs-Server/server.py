@@ -1,6 +1,6 @@
 __author__ = 'Kiailandi'
 
-from flask import Flask, render_template, jsonify, request, Response, json
+from flask import Flask, render_template, jsonify, request, Response, json, random
 
 app = Flask(__name__)
 app.debug = True
@@ -25,8 +25,12 @@ def page_not_found(error):
 
 @app.route('/submit/', methods=['POST'])
 def submit():
-    db = get_redis()
+    red = get_redis()
+    resultKey = 0
+    while(red.exists(resultKey)):
+        resultsKey = 'res' + random.randint(0, 1000000000000)
     data = dict(request.form)
+    data['key'] = resultsKey
 #   debug
     print "Data recived:"
     print repr(data)
@@ -56,7 +60,7 @@ def submit():
 #       dubug
         print data['timeout']
 
-    db.rpush(JOBS_KEY, json.dumps(data))
+    red.rpush(JOBS_KEY, json.dumps(data))
     return jsonify(success=True)
 
 

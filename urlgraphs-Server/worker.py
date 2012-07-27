@@ -17,6 +17,7 @@ def main():
 #       debug
         print job[1]
         data = dict(json.loads(job[1]))
+        resultsKey = data['key']
         print repr(data)
         print '=' * 80
         for var in data.items():
@@ -57,6 +58,7 @@ def main():
             print '\n'
             print 'Profondita', tupla_url[2]
             print '\n'*3
+            red.push(resultsKey, )
             red.rpush(RESULTS_KEY, json.dumps(tupla_url))
 
         print "END"
